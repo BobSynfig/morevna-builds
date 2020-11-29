@@ -1,18 +1,20 @@
-Install:
+## Install:  
 
-run all commands from root (as superuser)
+*Note: run all commands from root (as superuser) or with sudo (preferred)*  
 
+1. Clone this repository
 
-install dependency packages:
+2. Install dependency packages:
     you need: bash sudo uuid-runtime aufs-tools fuse genisoimage mutt
     for apt based OS use command:
-        apt-get install bash sudo uuid-runtime aufs-tools fuse genisoimage mutt
+        `apt-get install bash sudo uuid-runtime aufs-tools fuse genisoimage mutt`
 
 
-create and edit config file:
-    use config.sh.blank as a base:
-        cp config.sh.blank config.sh
+3. Create and edit config file (required):
+    use config.sh.blank as a base:  
+        `cp config.sh.blank config.sh`
 
+    *Optional configuration*  
     we use config (some_path is a fake):
         PACKET_BUILD_DIR=/some_path/builder-packet
         chrooter() {
@@ -30,19 +32,20 @@ create and edit config file:
         set record=
     see "background tasks" below
 
-
-download virtual environment:
+4. Download or build virtual environment
+    *Note: There are several possibilities, the first one is the most simple*  
+  
+    ***First possibility, fast and simple: download virtual environment:***  
     you may download our (we are Morevna Project team) os images from:
         https://coolbug.org/downloads/morevna/builder-images/
 
     you need two files:
         https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-32.iso
         https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-64.iso
-    approximate 6.5Gb, place both into chrooter/images/
+    approximate 6.5Gb, place both into chrooter/image/
 
-
-build virtual environment:
-    if you does not want to download os images you can build it
+    ***Second possibility, for advanced users, long: build virtual environment:***  
+    if you do not want to download os images you can build it
 
     before begin you may configure debian mirror in files:
         env/debian-7-32bit/files/sources.list
@@ -85,7 +88,7 @@ build virtual environment:
 
 installation done
 
-
+    ***Third possibility: time, space and bandwidth***  
 also you may download full backets build data made by us:
     https://coolbug.org/downloads/morevna/builder-images/
     https://coolbug.org/downloads/morevna/builder-images/builder-packets--YYYY-MM-DD.tar.gz
@@ -94,7 +97,7 @@ NB: build data contains a lot of hardlinks so make sure that you unpack it prope
 
 
 
-Let's build something:
+## Let's build something:
 
 
 now you may build packages by macro script:
@@ -104,7 +107,7 @@ also you can add hooks to publish built packages:
     for example create file publish/publish-synfigstudio.sh with content:
         #!/bin/bash
         cp "$1" /var/www/public/downloads/
-    when build is done new synfigstudio packge will placed into web-site directory
+    when build is done new synfigstudio package will placed into web-site directory
     you may look file publish/publish.sh for more info
 
 run internal builder commands in virtual environment:
@@ -194,19 +197,21 @@ see also
 
 Background tasks:
     to call task in background use:
-        backgrouns.sh some_command
+        background.sh some_command
     command will run in background and result will be sent to email (see config.sh)
     if you do not want to receive emai about success result (look only errors), call:
-        backgrouns.sh -q some_command
+        background.sh -q some_command
     logs stored in log/background.log
 
 
 Troubles:
-    sometimes virtual environmens does not unmounted properly
-    to clear this you need to unmount all mounts for */chrooter-*
+    Sometimes virtual environments are not unmounted properly
+    To clear this, you need to unmount all mounts for */chrooter-*
+    *starting from the deepest levels*
+    
     look mounts list by command:
-        mount
-
+        mount | grep chrooter-
+    
     unmount by command:
         umount "/some_path/chrooter-SOME_UUID"
     or with "force" option
@@ -214,7 +219,7 @@ Troubles:
     or with "lazy" option
         umount -l "/some_path/chrooter-SOME_UUID" 
     and check againt with
-        mount
+        mount | grep chrooter-
 
     after that remove the files
     you MUST do unmount before, if some dir are still mounted you can remove some system files
