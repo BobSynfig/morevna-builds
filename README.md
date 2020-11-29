@@ -5,150 +5,150 @@
 1. Clone this repository
 
 2. Install dependency packages:
-    you need: bash sudo uuid-runtime aufs-tools fuse genisoimage mutt
-    for apt based OS use command:
-        `apt-get install bash sudo uuid-runtime aufs-tools fuse genisoimage mutt`
+    you need: bash sudo uuid-runtime aufs-tools fuse genisoimage mutt  
+    for apt based OS use command:  
+        `apt-get install bash sudo uuid-runtime aufs-tools fuse genisoimage mutt`  
 
 
-3. Create and edit config file (required):
+3. Create and edit config file (required):  
     use config.sh.blank as a base:  
-        `cp config.sh.blank config.sh`
+        `cp config.sh.blank config.sh`  
 
     *Optional configuration*  
-    we use config (some_path is a fake):
-        PACKET_BUILD_DIR=/some_path/builder-packet
-        chrooter() {
-            export CHROOTER_PREFIX="/some_path_to_mount"
-            $BASE_DIR/chrooter/chrooter.sh $@
-        }
-        OPENTOONZ_TESTING_TAG="morevna"
-        export EMAIL_FAILED="e@mail.org"
-        export EMAIL_SUCCESS="$EMAIL_FAILED"
-        export EMAIL_SUBJECT="builder task finished"
+    we use config (some_path is a fake):  
+        PACKET_BUILD_DIR=/some_path/builder-packet  
+        chrooter() {  
+            export CHROOTER_PREFIX="/some_path_to_mount"  
+            $BASE_DIR/chrooter/chrooter.sh $@  
+        }  
+        OPENTOONZ_TESTING_TAG="morevna"  
+        export EMAIL_FAILED="e@mail.org"  
+        export EMAIL_SUCCESS="$EMAIL_FAILED"  
+        export EMAIL_SUBJECT="builder task finished"  
 
-    for emails configure ~/.muttrc, for example:
-        set smtp_url=smtps://login:password@server.org
-        set from="My Mail Bot <e@mail.org>"
-        set record=
-    see "background tasks" below
+    for emails configure ~/.muttrc, for example:  
+        set smtp_url=smtps://login:password@server.org  
+        set from="My Mail Bot <e@mail.org>"  
+        set record=  
+    see "background tasks" below  
 
-4. Download or build virtual environment
+4. Download or build virtual environment  
     *Note: There are several possibilities, the first one is the most simple*  
   
     ***First possibility, fast and simple: download virtual environment:***  
-    you may download our (we are Morevna Project team) os images from:
-        https://coolbug.org/downloads/morevna/builder-images/
+    you may download our (we are Morevna Project team) os images from:  
+        https://coolbug.org/downloads/morevna/builder-images/  
 
-    you need two files:
-        https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-32.iso
-        https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-64.iso
-    approximate 6.5Gb, place both into chrooter/image/
+    you need two files:  
+        https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-32.iso  
+        https://coolbug.org/downloads/morevna/builder-images/morevnaproject_build-debian-7-64.iso  
+    approximate 6.5Gb, place both into chrooter/image/  
 
     ***Second possibility, for advanced users, long: build virtual environment:***  
-    if you do not want to download os images you can build it
+    if you do not want to download os images you can build it  
 
-    before begin you may configure debian mirror in files:
-        env/debian-7-32bit/files/sources.list
-        env/debian-7-64bit/files/sources.list
-        env/debian-7-32bit/build-iso.sh into variable apt_mirror
-        env/debian-7-64bit/build-iso.sh into variable apt_mirror
+    before begin you may configure debian mirror in files:  
+        env/debian-7-32bit/files/sources.list  
+        env/debian-7-64bit/files/sources.list  
+        env/debian-7-32bit/build-iso.sh into variable apt_mirror  
+        env/debian-7-64bit/build-iso.sh into variable apt_mirror  
 
-    here you still can download a base debian images from:
-        https://coolbug.org/downloads/morevna/builder-images/debian-wheezy-i386.iso
-        https://coolbug.org/downloads/morevna/builder-images/debian-wheezy-amd64.iso
-    approximate 500Mb, place first into env/debian-7-32bit and second into env/debian-7-64bit
+    here you still can download a base debian images from:  
+        https://coolbug.org/downloads/morevna/builder-images/debian-wheezy-i386.iso  
+        https://coolbug.org/downloads/morevna/builder-images/debian-wheezy-amd64.iso  
+    approximate 500Mb, place first into env/debian-7-32bit and second into env/debian-7-64bit  
 
-    or build these images from scratch by debootstrap
-    install debootstarp:
-        apt-get install debootstrap
-    and build base debian images
-        cd env/debian-7-32bit # go to env/debian-7-32bit
-        ./build-iso.sh
-        cd ../debian-7-64bit  # go to env/debian-7-64bit
-        ./build-iso.sh
-        cd ../..              # go back
-    after that will appear two new files:
-        env/debian-7-32bit/debian-wheezy-i386.iso
-        env/debian-7-64bit/debian-wheezy-amd64.iso
-
-
-    now when you have files debian-wheezy-XXXX.iso you can build os images for builder
-    it's a long process because it will build GCC and MinGW from scratch
-    run commands:
-        cd env/debian-7-32bit # go to env/debian-7-32bit
-        ./build-base.sh       # just to copy base os image into chrooter/images
-        ./build.sh            # a long build process
-        cd ../debian-7-64bit  # go to env/debian-7-64bit
-        ./build-base.sh       # just to copy base os image into chrooter/images
-        ./build.sh            # a long build process
-        cd ../..              # go back
-
-    build environment ready
+    or build these images from scratch by debootstrap  
+    install debootstarp:  
+        `apt-get install debootstrap`  
+    and build base debian images  
+        `cd env/debian-7-32bit # go to env/debian-7-32bit`  
+        `./build-iso.sh`  
+        `cd ../debian-7-64bit  # go to env/debian-7-64bit`  
+        `./build-iso.sh`  
+        `cd ../..              # go back`  
+    after that will appear two new files:  
+        `env/debian-7-32bit/debian-wheezy-i386.iso`  
+        `env/debian-7-64bit/debian-wheezy-amd64.iso`  
 
 
-installation done
+    now when you have files debian-wheezy-XXXX.iso you can build os images for builder  
+    it's a long process because it will build GCC and MinGW from scratch  
+    run commands:  
+        `cd env/debian-7-32bit # go to env/debian-7-32bit`  
+        `./build-base.sh       # just to copy base os image into chrooter/images`  
+        `./build.sh            # a long build process`  
+        `cd ../debian-7-64bit  # go to env/debian-7-64bit`  
+        `./build-base.sh       # just to copy base os image into chrooter/images`  
+        `./build.sh            # a long build process`  
+        `cd ../..              # go back`  
+
+    build environment ready  
+
+
+installation done  
 
     ***Third possibility: time, space and bandwidth***  
-also you may download full backets build data made by us:
-    https://coolbug.org/downloads/morevna/builder-images/
-    https://coolbug.org/downloads/morevna/builder-images/builder-packets--YYYY-MM-DD.tar.gz
-approximate 20Gb compressed and 75Gb after decompress
-NB: build data contains a lot of hardlinks so make sure that you unpack it properly (tar -xf)
+also you may download full backets build data made by us:  
+    https://coolbug.org/downloads/morevna/builder-images/  
+    https://coolbug.org/downloads/morevna/builder-images/builder-packets--YYYY-MM-DD.tar.gz  
+approximate 20Gb compressed and 75Gb after decompress  
+NB: build data contains a lot of hardlinks so make sure that you unpack it properly (tar -xf)  
 
 
 
-## Let's build something:
+## Let's build something:  
 
 
-now you may build packages by macro script:
-    see files ./build-*.sh
+now you may build packages by macro script:  
+    see files `./build-*.sh`  
 
-also you can add hooks to publish built packages:
-    for example create file publish/publish-synfigstudio.sh with content:
-        #!/bin/bash
-        cp "$1" /var/www/public/downloads/
-    when build is done new synfigstudio package will placed into web-site directory
-    you may look file publish/publish.sh for more info
+also you can add hooks to publish built packages:  
+    for example create file publish/publish-synfigstudio.sh with content:  
+        `#!/bin/bash`  
+        `cp "$1" /var/www/public/downloads/`  
+    when build is done new synfigstudio package will placed into web-site directory  
+    you may look file publish/publish.sh for more info  
 
-run internal builder commands in virtual environment:
-    cd env
-    ./run.sh some_command
+run internal builder commands in virtual environment:  
+    `cd env`  
+    `./run.sh some_command`  
 
-also you may use:
-    env/debian-7-32bit/run.sh
-    env/debian-7-64bit/run.sh
-    env/debian-7-64bit/win32.sh
-    env/debian-7-64bit/win64.sh
+also you may use:  
+    `env/debian-7-32bit/run.sh`  
+    `env/debian-7-64bit/run.sh`  
+    `env/debian-7-64bit/win32.sh`  
+    `env/debian-7-64bit/win64.sh`  
 
-run build commands in native environment
-    ./run-native.sh some_command
+run build commands in native environment  
+    `./run-native.sh some_command`  
 
-build a selected package:
-    cd env
-    ./run.sh env_release MEGAPROGRAM-1.0.0
+build a selected package:  
+    `cd env`  
+    `./run.sh env_release MEGAPROGRAM-1.0.0`  
 
-take files from directory
-    env-builder-data/build/packet/linux-x64/MEGAPROGRAM-1.0.0/env_release
-or
-    your_build_path/packet/linux-x64/MEGAPROGRAM-1.0.0/env_release
+take files from directory  
+    `env-builder-data/build/packet/linux-x64/MEGAPROGRAM-1.0.0/env_release`  
+or  
+    `your_build_path/packet/linux-x64/MEGAPROGRAM-1.0.0/env_release`  
 
 
-"dry_run" option for paranoics:
-    ./run.sh dry_run with_deps unpack MEGAPROGRAM-1.0.0 
+"dry_run" option for paranoics:  
+    `./run.sh dry_run with_deps unpack MEGAPROGRAM-1.0.0`  
 
-List of commands
-    <action> <packet>
-        do <action> for <packet>
-        List of actions:
-        - download
-        - unpack
-        - build
-        - install
-        - install_release
-        - envdeps
-        - envdeps_release
-        - env
-        - env_release
+List of commands  
+    <action> <packet>  
+        do <action> for <packet>  
+        List of actions:  
+        - download  
+        - unpack  
+        - build  
+        - install  
+        - install_release  
+        - envdeps  
+        - envdeps_release  
+        - env  
+        - env_release  
 
     dry_run <any other command>
         - simulate activity
