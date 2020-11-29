@@ -51,6 +51,13 @@ pkinstall_release() {
     cp "$ENVDEPS_RELEASE_PACKET_DIR/lib/libboost_program_options."* "$APPDIR/usr/lib/" || return 1
     cp "$ENVDEPS_RELEASE_PACKET_DIR/lib/libboost_system."*          "$APPDIR/usr/lib/" || return 1
 
+    # fix FONTCONFIG errors
+    rm -f $APPDIR/usr/etc/fonts/conf.d/*.conf
+    for f in $APPDIR/usr/share/fontconfig/conf.avail/*.conf
+    do
+	ln -rs $APPDIR/usr/share/fontconfig/conf.avail/${f##*/} $APPDIR/usr/etc/fonts/conf.d/${f##*/}
+    done
+
     # clean examples
     rm -rf "$APPDIR/share/synfig/examples" || return 1
 
